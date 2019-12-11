@@ -12,10 +12,8 @@ edit the swappable.js file? so that the draggable.over behavior is different? hi
         
         /* using css flexbox */
         body{
-            background: #141b22;
-            font-family: Helvetica;
-            color: #fff;
-            text-align: center;
+            background: rgb(238,174,202);
+            background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
         }
         want responsive sizing:
         
@@ -28,7 +26,7 @@ edit the swappable.js file? so that the draggable.over behavior is different? hi
         #sort-container{
             margin: auto;
             position:fixed;
-            background: #141b22;
+            background: #fff;
             
             padding-right: 100px;
             padding-bottom: 100px;
@@ -39,8 +37,6 @@ edit the swappable.js file? so that the draggable.over behavior is different? hi
             width: 600px;
             height: 600px;
             /*margin: 120px 0px;*/
-            /*border:solid;*/
-
         }
         
         ul {
@@ -73,9 +69,7 @@ edit the swappable.js file? so that the draggable.over behavior is different? hi
           border-radius: 50%;
         }
         
-        .gradientcircle{
-             background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
-        }
+        
         .grey1 {
             background: rgba(200, 200, 200, 0.8);
         }
@@ -105,60 +99,17 @@ edit the swappable.js file? so that the draggable.over behavior is different? hi
         }
         
     
-/* @group Blink, testing out animations */
-.blink {
-	-webkit-animation: blink .50s linear infinite;
-	-moz-animation: blink .50s linear infinite;
-	-ms-animation: blink .50s linear infinite;
-	-o-animation: blink .50s linear infinite;
-	 animation: blink .50s linear infinite;
-}
-@-webkit-keyframes blink {
-	0% { opacity: 1; }
-	50% { opacity: 1; }
-	50.01% { opacity: 0; }
-	100% { opacity: 0; }
-}
-@-moz-keyframes blink {
-	0% { opacity: 1; }
-	50% { opacity: 1; }
-	50.01% { opacity: 0; }
-	100% { opacity: 0; }
-}
-@-ms-keyframes blink {
-	0% { opacity: 1; }
-	50% { opacity: 1; }
-	50.01% { opacity: 0; }
-	100% { opacity: 0; }
-}
-@-o-keyframes blink {
-	0% { opacity: 1; }
-	50% { opacity: 1; }
-	50.01% { opacity: 0; }
-	100% { opacity: 0; }
-}
-@keyframes blink {
-	0% { opacity: 1; }
-	50% { opacity: 1; }
-	50.01% { opacity: 0; }
-	100% { opacity: 0; }
-}
-/* @end */
-
-        
-        
         </style>
         
 </head>
 <body>
-    <h2>sort from lightest to darkest, smallest to largest</h2>
     
     <div id="body-container">
     <div id="sort-container">
    <ul>
-       <li class = "blink"><div class="circle grey1 size1">1</div></li>
-       <li><div class="circle grey1 size2 blink">2</div></li>
-       <li><div class="circle grey1 size3  blink">3</div></li>
+       <li><div class="circle grey1 size1">1</div></li>
+       <li><div class="circle grey1 size2">2</div></li>
+       <li><div class="circle grey1 size3">3</div></li>
        <li><div class="circle grey2 size1">4</div></li>
        <li><div class="circle grey2 size2">5</div></li>
        <li><div class="circle grey2 size3">6</div></li>
