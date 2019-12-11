@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+   <ul>
+       <li>Item 1</li>
+       <li>Item 2</li>
+       <li>Item 3</li>
+       <li>Item 4</li>
+       <li>Item 5</li>
+   </ul>
+</body>
+<script>
+const a = new Draggable.Swappable(document.querySelector('ul'), {
+    draggable: 'li'
+});
+
+a.on('drag:start', function() { console.log('start')})
+</script>
+</html>

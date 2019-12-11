@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.js"></script>
+    
+    <style>
+        
+
+        /* using css flexbox */
+        
+        want responsive sizing:
+        #body-container{
+        margin: auto;
+           width: 100vw;
+           height: 100vw;
+        }
+
+        #sort-container{
+            margin: auto;
+            position:fixed;
+            left: 100px;
+            right: 20%;
+            top: 10%;
+            z-index: -1;
+            width: 600px;
+            height: 600px;
+            /*margin: 120px 0px;*/
+        }
+        
+        ul {
+          display: flex;
+          flex-wrap: wrap;
+          list-style-type: none;
+          padding-left: 0;
+        }
+
+        ul li {
+            position:relative;
+          flex: 0 0 calc(30% - 30px);
+          margin: 50px 0px;
+          padding: 10px 100px;
+            width: 100px;
+            height: 100px;
+          text-align: center;
+         box-sizing: border-box;
+        /* border: 1px dashed red;
+          background-color: yellow;*/
+        }
+        
+        ul li:focus { outline:none; }
+        
+        .circle {
+          width: 100px;
+          height: 100px;
+          background: rgba(0, 0, 0, 0.8);
+          border-radius: 50%;
+        }
+        
+        
+        .grey1 {
+            background: rgba(200, 200, 200, 0.8);
+        }
+        
+        .grey2 {
+            background: rgba(150, 150, 150, 0.8);
+        }
+        
+        .grey3 {
+            background: rgba(100, 100, 100, 0.8);
+        }
+        
+        .size1 { 
+            width: 50px; 
+            height: 50px;
+            margin: auto;
+        }
+        
+        .size2 { 
+            width: 75px; 
+            height: 75px;
+        }
+        
+        .size3 { 
+            width: 100px; 
+            height: 100px;
+        }
+        
+    
+        </style>
+        
+</head>
+<body>
+    
+    <div id="body-container">
+        <h2>My Experiment! :)</h2>
+    <div id="sort-container">
+   <ul>
+       <li><div class="circle grey1 size1">1</div></li>
+       <li><div class="circle grey1 size2">2</div></li>
+       <li><div class="circle grey1 size3">3</div></li>
+       <li><div class="circle grey2 size1">4</div></li>
+       <li><div class="circle grey2 size2">5</div></li>
+       <li><div class="circle grey2 size3">6</div></li>
+       <li><div class="circle grey3 size1">7</div></li>
+       <li><div class="circle grey3 size2">8</div></li>
+       <li><div class="circle grey3 size3">9</div></li>
+       
+       </ul>
+        </div>
+        </div>
+</body>
+<script>
+const a = new Draggable.Swappable(document.querySelector('ul'), {
+    draggable: 'li'
+});
+
+a.on('drag:start', function() { console.log('start')})
+</script>
+</html>
