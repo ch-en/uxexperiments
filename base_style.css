@@ -1,0 +1,188 @@
+/* master style sheet*/
+
+/* drop shadows */
+.shadow {
+   -moz-box-shadow:    inset 0 0 10px #000000;
+   -webkit-box-shadow: inset 0 0 10px #000000;
+   box-shadow:         inset 0 0 10px #000000;
+}
+
+.one-edge-shadow {
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	   -moz-box-shadow: 0 8px 6px -6px black;
+	        box-shadow: 0 8px 6px -6px black;
+}
+
+        /* using css flexbox */
+        body{
+            background: #141b22;
+            font-family: Helvetica;
+            color: #fff;
+            text-align: center;
+        }
+        want responsive sizing:
+        
+        #body-container{
+            margin: auto;
+
+        }
+
+        #sort-container{
+            margin: auto;
+            position:fixed;
+            
+            background: #141b22;
+            
+            left: 15%;
+            right: 25%;
+            top: 10%;
+            z-index: -1;
+            width: 600px;
+            height: 600px;
+            /*margin: 120px 0px;*/
+            /*border:solid;*/
+
+        }
+
+.drop-zone{
+    width:198px;
+    height:198px;
+    border:1px solid black;
+    background-color:red;
+    position:absolute;
+}
+        
+        ul {
+            
+          display: flex;
+          flex-wrap: wrap;
+          list-style-type: none;
+          padding-left: 0;
+        }
+
+        ul li {
+            position:relative;
+          flex: 0 0 calc(30% - 30px);
+          margin: 50px 0px;
+          padding: 10px 100px;
+            width: 100px;
+            height: 100px;
+          text-align: center;
+         box-sizing: border-box;
+        /* border: 1px dashed red;
+          background-color: yellow;*/
+        }
+        
+        ul li:focus { outline:none; }
+        
+        .bar_horizontal {
+            position:absolute;
+            height:20px;
+            background-color:white;
+        }
+        .bar_vertical {
+            position:absolute;
+            width:20px;
+            background-color:white;
+        }
+
+        .box {
+            position:absolute;
+            z-index:-999;
+        }
+
+    .center {
+         position:relative;
+    }
+
+.obj {
+    position:absolute;
+}
+
+        .circle {
+          width: 100px;
+          height: 100px;
+            
+          background: rgba(0, 0, 0, 0.8);
+          /* border-radius: 50%; */
+        }
+        
+        .gradientcircle{
+             background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+        }
+        .grey1 {
+            background: rgba(200, 200, 200, 0.8);
+        }
+        
+        .grey2 {
+            background: rgba(150, 150, 150, 0.8);
+        }
+        
+        .grey3 {
+            background: rgba(100, 100, 100, 0.8);
+        }
+        
+        .size1 { 
+            position:absolute;
+            width: 50px; 
+            height: 50px;
+            margin: auto;
+        }
+        
+        .size2 { 
+            position:absolute;
+            width: 75px; 
+            height: 75px;
+        }
+        
+        .size3 { 
+            position:absolute;
+            width: 100px; 
+            height: 100px;
+        }
+        
+
+
+    
+/* @group Blink, testing out animations */
+.blink {
+	-webkit-animation: blink .50s linear infinite;
+	-moz-animation: blink .50s linear infinite;
+	-ms-animation: blink .50s linear infinite;
+	-o-animation: blink .50s linear infinite;
+	 animation: blink .50s linear infinite;
+}
+@-webkit-keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 1; }
+	50.01% { opacity: 0; }
+	100% { opacity: 0; }
+}
+@-moz-keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 1; }
+	50.01% { opacity: 0; }
+	100% { opacity: 0; }
+}
+@-ms-keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 1; }
+	50.01% { opacity: 0; }
+	100% { opacity: 0; }
+}
+@-o-keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 1; }
+	50.01% { opacity: 0; }
+	100% { opacity: 0; }
+}
+@keyframes blink {
+	0% { opacity: 1; }
+	50% { opacity: 1; }
+	50.01% { opacity: 0; }
+	100% { opacity: 0; }
+}
+/* @end */
+
+       
+        
