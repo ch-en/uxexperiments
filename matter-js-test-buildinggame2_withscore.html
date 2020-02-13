@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<! -- google form questions: what made you stop the game? did you think you were done? what made you think you were done? (select all?)>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.js"></script>
+    <script src="matter-js-master/matter.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="base_style.css" />
+    <link rel="stylesheet" type="text/css" href="gravity_animations.css" />
+</head>
+
+<body>
+    
+    <div style="pointer-events:none">
+         <div class="score current-score">
+           SCORE<br><span></span>
+        </div>
+        <div class="bar_horizontal" style="top:150px; width: 600px; background-color:rgb(46,43,68)"></div>
+        <div class="bar_horizontal" style="top:340px; width: 600px"></div>
+        <div class="bar_horizontal" style="top:520px; width: 600px"></div>
+        <div class="bar_vertical" style="top:120px; left:250px; height: 600px"></div>
+        <div class="bar_vertical" style="top:340px; left:420px; height: 300px"></div>
+    </div>
+</body>
+
+<script>
+ // score elements
+    let $currentScore = $('.current-score span');
+     // shared variables
+    let currentScore;
+    let engine, world, render;
+/*    var Example = Example || {};
+
+    Example.compositeManipulation = function () {
+*/
+    function init() {
+        currentScore = 0;
+    }
+    
+        // module aliases
+        var Engine = Matter.Engine,
+            Render = Matter.Render,
+            Runner = Matter.Runner,
+            Events = Matter.Events,
+            Composite = Matter.Composite,
+            Composites = Matter.Composites,
+            MouseConstraint = Matter.MouseConstraint,
+            Mouse = Matter.Mouse,
+            World = Matter.World,
+            Bodies = Matter.Bodies;
+
+        // create an engine
+        var engine = Engine.create(),
+            world = engine.world;
+
+        // create a renderer
+        var render = Render.create({
+            element: document.body,
+            engine: engine,
+            options: {
+                width: 800,
+                height: 600,
+                showVelocity: true,
+                wireframes: false,
+               // background: '#C44D58'
+            }
+        });
+
+
+        // run the renderer
+        Render.run(render);
+
+        // create runner
+        var runner = Runner.create();
+        Runner.run(runner, engine);
+
+        //BODIES
+    
+        
+        var redColor = '#C44D58',
+            greenColor = '#C7F464';
+
+        var bgstack = Composites.stack(100, 100, 30, 30, 0, 0, function (x, y) {
+            return Bodies.rectangle(x, y, 20, 20, { 
+            isSensor: true,} );
+        }); 
+        var stack = Composites.stack(200, 200, 20, 10, 0, 0, function (x, y) {
+            return Bodies.rectangle(x, y, 20, 20);
+        }); 
+        var boxA = Bodies.rectangle(400, 200, 20, 20);
+        var boxB = Bodies.rectangle(450, 50, 20, 20);
+        var target = Bodies.circle(50, 500, 20);
+        var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+
+        var collider = Bodies.rectangle(350, 20, 1000, 10, {
+        isSensor: true,
+        isStatic: true,
+        render: {
+            fillStyle: 'transparent',
+            // strokeStyle: redColor,
+            //lineWidth: 1
+        }
+    });
+        
+    
+        // add all of the bodies to the world
+        World.add(world,
+            [target, boxA, boxB, ground, bgstack, stack, collider,  
+
+                // mountain
+
+                // walls
+                Bodies.rectangle(500, 300, 20, 150, {
+                    render: {
+                        fillStyle: 'white',
+                        lineWidth: 0
+                    },
+                    isStatic: true
+                }),
+
+                Bodies.rectangle(0, 300, 40, 600, {
+                    render: {
+                        fillStyle: 'transparent',
+                        lineWidth: 0
+                    },
+                    isStatic: true
+                }),
+             Bodies.rectangle(800, 300, 40, 600, {
+                    render: {
+                        fillStyle: 'transparent',
+                        lineWidth: 0
+                    },
+                    isStatic: true
+                }),
+              Bodies.rectangle(400, 0, 800, 40, {
+                    render: {
+                        fillStyle: 'transparent',
+                        lineWidth: 0
+                    },
+                    isStatic: true
+                }),
+                Bodies.rectangle(400, 600, 800, 40, { isStatic: true })
+            ]);
+
+
+    // gravity or not?
+        world.gravity.y = 0;
+    
+    
+    // EVENTS!! 
+        Events.on(engine, 'afterUpdate', function (event) {
+            var time = engine.timing.timestamp;
+            updateScore(currentScore + target.position.y);
+            /*
+        Composite.translate(stack, {
+            x: Math.sin(time * 0.001) * 2,
+            y: 0
+        });
+
+        var scale = 1 + (Math.sin(time * 0.001) * 0.01);
+
+        Composite.scale(stack, scale, scale, {
+            x: 300,
+            y: 300
+        });
+
+        Composite.translate(bgstack, {
+            x: Math.sin(time * 0.001) * 2,
+            y: 0
+        });
+
+        var scale = 1 + (Math.sin(time * 0.001) * 0.01);
+
+        Composite.scale(bgstack, scale, scale, {
+            x: 300,
+            y: 300
+        });
+        */
+            
+        });
+    
+   
+     // an example of using collisionActive event on an ENTIRE engine
+    Events.on(engine, 'collisionStart', function(event) {
+        var pairs = event.pairs;
+
+        // change object colours to show those in an active collision (e.g. resting contact)
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            if (pair.bodyA !== collider || pair.bodyB !== collider){
+                pair.bodyA.render.fillStyle = '#111';
+                pair.bodyB.render.fillStyle = '#111';
+            }
+        }
+    });
+      // an example of using collisionEnd event on an engine
+    Events.on(engine, 'collisionEnd', function(event) {
+        var pairs = event.pairs;
+
+        // change object colours to show those ending a collision
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+
+            // or transparent? 
+            if (pair.bodyA !== collider || pair.bodyB !== collider){
+                pair.bodyA.render.fillStyle = '#000';
+                pair.bodyB.render.fillStyle = '#000';
+            }
+        }
+    }); 
+    
+    // ONLY THE OBJECTS IN THE COLLIDER
+    Events.on(engine, 'collisionActive', function(event) {
+        var pairs = event.pairs;
+        
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === collider) {
+                pair.bodyB.render.strokeStyle = redColor;
+                // world.render.options = {background: black};
+            } else if (pair.bodyB === collider) {
+                pair.bodyA.render.fillStyle = redColor;
+            }
+        }
+    });
+
+    Events.on(engine, 'collisionEnd', function(event) {
+        var pairs = event.pairs;
+        
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === collider) {
+                pair.bodyB.render.strokeStyle = greenColor;
+            } else if (pair.bodyB === collider) {
+                pair.bodyA.render.fillStyle = greenColor;
+            }
+        }
+    });
+    
+
+        // adding  mouse control
+        var mouse = Mouse.create(render.canvas),
+            mouseConstraint = MouseConstraint.create(engine, {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.2,
+                    render: {
+                        visible: false
+                    }
+                }
+            });
+        World.add(world, mouseConstraint);
+
+        // keep the mouse in sync with rendering
+        render.mouse = mouse;
+
+   
+        // fit the render viewport to the scene
+        Render.lookAt(render, {
+            min: { x: 0, y: 0 },
+            max: { x: 800, y: 600 }
+        });
+    
+    //
+    
+
+    if (typeof module !== 'undefined') {
+        module.exports = Example[Object.keys(Example)[0]];
+    } 
+</script>
+
+</html>

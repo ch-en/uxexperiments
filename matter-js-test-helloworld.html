@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<! -- google form questions: what made you stop the game? did you think you were done? what made you think you were done? (select all?)>
 <html>
 <head>
     <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.js"></script>
@@ -9,13 +8,7 @@
     <link rel = "stylesheet" type = "text/css" href = "gravity_animations.css" />
 </head>
 <body>
-      <div style="pointer-events:none">
-       <div class="bar_horizontal" style="top:150px; width: 600px; background-color:rgb(46,43,68)"></div>
-       <div class="bar_horizontal" style="top:340px; width: 600px"></div>
-       <div class="bar_horizontal" style="top:520px; width: 600px"></div>
-       <div class="bar_vertical" style="top:120px; left:250px; height: 600px"></div>
-       <div class="bar_vertical" style="top:340px; left:420px; height: 300px"></div>
-          </div>
+    
 </body>
     
 <script>
@@ -25,80 +18,31 @@
 var Engine = Matter.Engine,
     Render = Matter.Render,
     Runner = Matter.Runner,
-    Composites = Matter.Composites,
-    MouseConstraint = Matter.MouseConstraint,
-    Mouse = Matter.Mouse,
     World = Matter.World,
     Bodies = Matter.Bodies;
 
 // create an engine
-var engine = Engine.create(),
-        world = engine.world;
+var engine = Engine.create();
 
 // create a renderer
 var render = Render.create({
     element: document.body,
-    engine: engine, 
-     options: {
-            showVelocity: true,
-            // showAngleIndicator: true
-            wireframes: false
-        }
+    engine: engine
 });
-    
 
-//BODIES
-    
- // add bodies
-var stack = Composites.stack(100, 350, 3, 3, 0, 0, function(x, y) {
-    return Bodies.rectangle(x, y, 100, 100);
-});
-// add more bodies
+// create two boxes and a ground
 var boxA = Bodies.rectangle(400, 200, 80, 80);
 var boxB = Bodies.rectangle(450, 50, 80, 80);
-var ball = Bodies.circle(450, 50, 80);
 var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-    
+
 // add all of the bodies to the world
-World.add(engine.world, 
-        [ball, boxA, boxB, ground, stack,
-        // walls
-        
-        Bodies.rectangle(500, 300, 20, 150, { 
-                                             render: {
-                                                 fillStyle: 'white',
-                                                 lineWidth: 0
-                                             },
-                                             isStatic: true }),
-                                             
-        Bodies.rectangle(0, 300, 40, 600, { isStatic: true }),
-        Bodies.rectangle(400, 600, 800, 40, { isStatic: true })
-        ]);
-    
-// adding  mouse control
-    var mouse = Mouse.create(render.canvas),
-        mouseConstraint = MouseConstraint.create(engine, {
-            mouse: mouse,
-            constraint: {
-                stiffness: 0.2,
-                render: {
-                    visible: false
-                }
-            }
-        });
-     World.add(world, mouseConstraint);
-
-    // keep the mouse in sync with rendering
-    render.mouse = mouse;
-
+World.add(engine.world, [boxA, boxB, ground]);
 
 // run the engine
-Engine.run(engine),
-    world = engine.world;
+Engine.run(engine);
 
 // run the renderer
 Render.run(render);
-    
 // create runner
 var runner = Runner.create();
 Runner.run(runner, engine);
