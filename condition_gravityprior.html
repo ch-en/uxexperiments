@@ -74,16 +74,10 @@
         var redColor = '#C44D58',
             greenColor = '#C7F464';
 
-        var bgstack = Composites.stack(100, 100, 30, 30, 0, 0, function (x, y) {
-            return Bodies.rectangle(x, y, 20, 20, { 
-            isSensor: true,} );
+        var stack = Composites.stack(200, 200, 1, 5, 0, 0, function (x, y) {
+            return Bodies.rectangle(x, y, 80, 80);
         }); 
-        var stack = Composites.stack(200, 200, 20, 10, 0, 0, function (x, y) {
-            return Bodies.rectangle(x, y, 20, 20);
-        }); 
-        var boxA = Bodies.rectangle(400, 200, 20, 20);
-        var boxB = Bodies.rectangle(450, 50, 20, 20);
-        var target = Bodies.circle(50, 500, 20);
+        var target = Bodies.circle(50, 500, 40);
         var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
         var collider = Bodies.rectangle(350, 20, 1000, 10, {
@@ -99,19 +93,12 @@
     
         // add all of the bodies to the world
         World.add(world,
-            [target, boxA, boxB, ground, bgstack, stack, collider,  
+            [target, ground, //bgstack, 
+             stack, collider,  
 
                 // mountain
 
                 // walls
-                Bodies.rectangle(500, 300, 20, 150, {
-                    render: {
-                        fillStyle: 'white',
-                        lineWidth: 0
-                    },
-                    isStatic: true
-                }),
-
                 Bodies.rectangle(0, 300, 40, 600, {
                     render: {
                         fillStyle: 'transparent',
