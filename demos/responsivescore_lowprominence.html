@@ -6,6 +6,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.js"></script>
     <script src="matter-js-master/matter.js" type="text/javascript"></script>
 
+    <script src="jStat.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="base_style.css" />
     <link rel="stylesheet" type="text/css" href="gravity_animations.css" />
 </head>
@@ -13,9 +15,9 @@
 <body>
     
     <div style="pointer-events:none">
-         <div class="score current-score">
-           SCORE<br><span></span>
-        </div>
+        <div class="score current-score" style="color:white">
+            SCORE<br><span></span>
+         </div>
         <!-- <div class="bar_horizontal" style="top:150px; width: 600px; background-color:rgb(46,43,68)"></div>
         <div class="bar_horizontal" style="top:340px; width: 600px"></div>
         <div class="bar_horizontal" style="top:520px; width: 600px"></div>
@@ -30,6 +32,15 @@
 
     Example.compositeManipulation = function () {
 */
+//TASK : GET SCORE TO REFLECT VERTICAL POSITION OF TARGET OBJECT
+// should other objects move on their own and be 'predators' and actually be unrelated? as a misleading game element
+     
+    let currentScore = 0;
+    let currentScoreMean = 0;
+    let scoreIterationDelay = 0;
+    let scoreText = document.querySelector('.current-score span');
+    // shared variables
+    
     
         // module aliases
         var Engine = Matter.Engine,
@@ -59,7 +70,10 @@
                // background: '#C44D58'
             }
         });
-
+        // starting values
+        currentScore = 0; 
+        currentScoreMean = 2;
+        
 
         // run the renderer
         Render.run(render);
@@ -74,10 +88,32 @@
         var redColor = '#C44D58',
             greenColor = '#C7F464';
 
-        var stack = Composites.stack(200, 200, 1, 10, 0, 0, function (x, y) {
-            return Bodies.rectangle(x, y, 50, 50);
+        var stack = Composites.stack(200, 400, 1, 4, 0, 0, function (x, y) {
+            return Bodies.rectangle(x, y, 50, 50,  {render: {
+            fillStyle: '#ffffff',
+            // strokeStyle: redColor,
+            //lineWidth: 1
+        }});
         }); 
-        var target = Bodies.circle(50, 500, 20);
+        var stack2 = Composites.stack(400, 400, 1, 4, 0, 0, function (x, y) {
+            return Bodies.circle(x, y, 25,  {render: {
+            fillStyle: '#ffffff',
+            // strokeStyle: redColor,
+            //lineWidth: 1
+        }});
+        }); 
+        var stack3 = Composites.stack(500, 400, 1, 4, 0, 0, function (x, y) {
+            return Bodies.circle(x, y, 35,  {render: {
+            fillStyle: '#ffffff',
+            // strokeStyle: redColor,
+            //lineWidth: 1
+        }});
+        }); 
+        var target = Bodies.circle(50, 500, 25, {render: {
+            fillStyle: '#ffffff',
+            // strokeStyle: redColor,
+            //lineWidth: 1
+        }});
         var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
         var collider = Bodies.rectangle(350, 20, 1000, 10, {
@@ -87,14 +123,44 @@
             fillStyle: 'transparent',
             // strokeStyle: redColor,
             //lineWidth: 1
-        }
-    });
+        }});
+
+        // 10,400,600 <- kinda cool
+        // 300, 400, 300
+        var circleregion = Bodies.circle(500, 400, 150, {
+        isSensor: true,
+        isStatic: true,
+        render: {
+            fillStyle: 'transparent',
+            strokeStyle: "#fff",
+            lineWidth: 1
+        }});
+        
+        var squareregion2 = Bodies.rectangle(400, 200, 50, 50, {
+        isSensor: true,
+        isStatic: true,
+        render: {
+            fillStyle: 'transparent',
+            strokeStyle: "#fff",
+            lineWidth: 1
+        }});
+
+        var squareregion = Bodies.rectangle(200, 200, 200, 200, { //50 would be cool
+        isSensor: true,
+        isStatic: true,
+        render: {
+            fillStyle: 'transparent',
+            strokeStyle: "#fff",
+            lineWidth: 1
+        }});
+
+    
         
     
         // add all of the bodies to the world
         World.add(world,
             [target, ground, //bgstack, 
-             stack, collider,  
+             stack, stack2, stack3, collider, circleregion, squareregion, squareregion2,
 
                 // mountain
 
@@ -129,8 +195,9 @@
     
     
     // EVENTS!! 
-        Events.on(engine, 'afterUpdate', function (event) {
+    Events.on(engine, 'afterUpdate', function (event) {
             var time = engine.timing.timestamp;
+            updateScore(currentScoreMean);
             /*
         Composite.translate(stack, {
             x: Math.sin(time * 0.001) * 2,
@@ -159,38 +226,10 @@
             
         });
     
-   /*
-     // an example of using collisionActive event on an ENTIRE engine
-    Events.on(engine, 'collisionStart', function(event) {
-        var pairs = event.pairs;
-
-        // change object colours to show those in an active collision (e.g. resting contact)
-        for (var i = 0; i < pairs.length; i++) {
-            var pair = pairs[i];
-            if (pair.bodyA !== collider || pair.bodyB !== collider){
-                pair.bodyA.render.fillStyle = '#111';
-                pair.bodyB.render.fillStyle = '#111';
-            }
-        }
-    });
-      // an example of using collisionEnd event on an engine
-    Events.on(engine, 'collisionEnd', function(event) {
-        var pairs = event.pairs;
-
-        // change object colours to show those ending a collision
-        for (var i = 0; i < pairs.length; i++) {
-            var pair = pairs[i];
-
-            // or transparent? 
-            if (pair.bodyA !== collider || pair.bodyB !== collider){
-                pair.bodyA.render.fillStyle = '#000';
-                pair.bodyB.render.fillStyle = '#000';
-            }
-        }
-    }); 
-    */
+      
     
-    // ONLY THE OBJECTS IN THE COLLIDER
+
+    // ONLY THE OBJECTS HITTING THE COLLIDER
     Events.on(engine, 'collisionActive', function(event) {
         var pairs = event.pairs;
         
@@ -198,9 +237,12 @@
             var pair = pairs[i];
 
             if (pair.bodyA === collider) {
-                pair.bodyB.render.strokeStyle = redColor;
+                // updateScore(currentScoreMean+2); // this calls updateScore, which makes it update faster, we just want to increase the Mean
+                currentScoreMean = 3;
+                pair.bodyB.render.fillStyle = redColor;
                 // world.render.options = {background: black};
             } else if (pair.bodyB === collider) {
+                currentScoreMean = 3;
                 pair.bodyA.render.fillStyle = redColor;
             }
         }
@@ -212,14 +254,17 @@
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === collider) {
-                pair.bodyB.render.strokeStyle = greenColor;
-            } else if (pair.bodyB === collider) {
-                pair.bodyA.render.fillStyle = greenColor;
+            if (pair.bodyA === collider && pair.bodyB === target) {
+                collider.render.fillStyle = 'transparent';
+                currentScoreMean = 0;
+            } else if (pair.bodyB === collider && pair.bodyA === target) {
+                collider.render.fillStyle = 'transparent';
+                currentScoreMean = 0;
             }
         }
     });
     
+
 
         // adding  mouse control
         var mouse = Mouse.create(render.canvas),
@@ -243,6 +288,25 @@
             min: { x: 0, y: 0 },
             max: { x: 800, y: 600 }
         });
+    
+     function updateScore(currentScoreMean) {        
+        add = jStat.normal.sample(currentScoreMean,5);
+        currentScore = Math.round(
+            (currentScore + add)
+            );
+        currentScoreDisplay = Math.floor(currentScore / 50);
+        // console.log(add);
+        //currentScore = Math.floor(currentScore + jStat.normal.sample(1,1));
+        // Math.floor((currentScore + (currentScoreRandomizer + currentScoreMean))/10);
+        // currentScoreRandomizer = Math.floor((Math.random() * 100)-.5); // generates number between 1 and 10, then subtract 5
+        scoreIterationDelay++;
+
+        if(scoreIterationDelay%35 == 0){  // can increase or decrease this for interesting result?
+        // if(engine.timing.timestamp % 50 == 0){ // same as above, but w engine rendering
+            scoreText.innerHTML=currentScoreDisplay;
+            scoreIterationDelay = 0;
+        }
+    }
     
     //
     
